@@ -1,4 +1,4 @@
-package org.example.servlets;
+package org.example.config;
 
 import org.example.controller.PostController;
 import org.example.repository.PostRepository;
@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class JavaConfiguration {
+public class JavaConfig {
     @Bean
-    public PostController postController(PostService service) {
-        return new PostController(service);
+    public PostController postController(PostService postService) {
+        return new PostController(postService);
     }
 
     @Bean
-    public PostService postService(PostRepository repository) {
-        return new PostService(repository);
+    public PostService postService(PostRepository postRepository) {
+        return new PostService(postRepository);
     }
 
     @Bean
