@@ -3,9 +3,12 @@ package org.example.service;
 import org.example.exception.NotFoundException;
 import org.example.model.Post;
 import org.example.repository.PostRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Service
 public class PostService {
   private final PostRepository repository;
 
@@ -13,7 +16,7 @@ public class PostService {
     this.repository = repository;
   }
 
-  public List<Post> all() {
+  public ConcurrentHashMap<Long, String> all() {
     return repository.all();
   }
 
@@ -28,5 +31,10 @@ public class PostService {
   public void removeById(long id) {
     repository.removeById(id);
   }
+  public Post updateById(long id, Post updatedPost) {
+    Post existingPost = getById(id);
+    existingPost.setTitle(updatedPost.getTitle());
+    existingPost.setContent(updatedPost.getContent());
+    return repository.save(existingPost);
+  }
 }
-

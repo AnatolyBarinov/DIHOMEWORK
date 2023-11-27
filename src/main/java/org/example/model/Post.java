@@ -1,8 +1,10 @@
 package org.example.model;
 
+
 public class Post {
   private long id;
   private String content;
+  private String title;
 
   public Post() {
   }
@@ -26,5 +28,12 @@ public class Post {
 
   public void setContent(String content) {
     this.content = content;
+  }
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 }
