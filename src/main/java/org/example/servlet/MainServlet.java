@@ -2,6 +2,7 @@ package org.example.servlet;
 
 import org.example.config.AppConfig;
 import org.example.controller.PostController;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -14,30 +15,62 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.Reader;
 
+
 public class MainServlet extends HttpServlet {
-    private WebApplicationContext context;
-    private PostController postController;
+    private PostController controller;
 
     @Override
-    public void init() throws ServletException {
-        AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
-        webApplicationContext.register(AppConfig.class);
-        webApplicationContext.refresh();
-        context = webApplicationContext;
-
-        // Получаем бин контроллера из контекста
-        postController = context.getBean(PostController.class);
+    public void init() {
+        final var context = new AnnotationConfigApplicationContext(AppConfig.class);
+        controller = context.getBean(PostController.class);
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        postController.all(resp);
-    }
+    protected void service(HttpServletRequest req, HttpServletResponse resp) {
+        if (req == null || resp == null) {
+            return;
+        }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try (Reader reader = req.getReader()) {
-            postController.save(reader, resp);
+        try {
+            final var path = req.getRequestURI();
+            final var method = req.getMethod();
+
+            switch (method) {
+                case "GET":
+                    if (path.equals("/api/posts")) {
+                        controller.all(resp);
+                        return;
+                    }
+                    if (path.matches("/api/posts/\\d+")) {
+                        final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+                        controller.getById(id, resp);
+                        return;
+                    }
+                    break;
+                case "POST":
+                    if (path.equals("/api/posts")) {
+                        controller.save(req.getReader(), resp);
+                        return;
+                    }
+                    break;
+                case "DELETE":
+                    if (path.matches("/api/posts/\\d+")) {
+                        final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+                        controller.removeById(id, resp);
+                        return;
+                    }
+                    break;
+            }
+
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                resp.getWriter().println("Internal Server Error");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }
