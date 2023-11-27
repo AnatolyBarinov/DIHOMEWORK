@@ -48,11 +48,4 @@ public class PostController {
     final var gson = new Gson();
     response.getWriter().print(gson.toJson(data));
   }
-  public void updateById(long id, Reader body, HttpServletResponse response) throws IOException {
-    response.setContentType(APPLICATION_JSON);
-    final var gson = new Gson();
-    final var post = gson.fromJson(body, Post.class);
-    final var updatedPost = service.updateById(id, post);
-    response.getWriter().print(gson.toJson(updatedPost));
-  }
 }

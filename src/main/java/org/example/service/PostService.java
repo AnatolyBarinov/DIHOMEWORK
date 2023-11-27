@@ -31,10 +31,4 @@ public class PostService {
   public void removeById(long id) {
     repository.removeById(id);
   }
-  public Post updateById(long id, Post updatedPost) {
-    Post existingPost = getById(id);
-    existingPost.setTitle(updatedPost.getTitle());
-    existingPost.setContent(updatedPost.getContent());
-    return repository.save(existingPost);
-  }
 }
