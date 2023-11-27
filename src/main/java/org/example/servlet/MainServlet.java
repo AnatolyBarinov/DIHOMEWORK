@@ -7,11 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 import java.io.Reader;
-@ComponentScan
+
 public class MainServlet extends HttpServlet {
     private PostController postController;
+
 
     @Override
     public void init() throws ServletException {
@@ -30,5 +32,4 @@ public class MainServlet extends HttpServlet {
             postController.save(reader, resp);
         }
     }
-}
 }
