@@ -1,6 +1,7 @@
 package org.example.servlet;
 
 import org.example.config.AppConfig;
+import org.example.config.JavaConfig;
 import org.example.controller.PostController;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +22,7 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() {
-        final var context = new AnnotationConfigApplicationContext(AppConfig.class);
+        final var context = new AnnotationConfigApplicationContext(JavaConfig.class);
         controller = context.getBean(PostController.class);
     }
 
