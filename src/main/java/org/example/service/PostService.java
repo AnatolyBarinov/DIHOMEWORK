@@ -3,8 +3,7 @@ package org.example.service;
 import org.example.exception.NotFoundException;
 import org.example.model.Post;
 import org.example.repository.PostRepository;
-
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PostService {
   private final PostRepository repository;
@@ -13,7 +12,7 @@ public class PostService {
     this.repository = repository;
   }
 
-  public List<Post> all() {
+  public ConcurrentHashMap<Long, String> all() {
     return repository.all();
   }
 
