@@ -4,9 +4,11 @@ import org.example.controller.PostController;
 import org.example.repository.PostRepository;
 import org.example.service.PostService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ComponentScan("org.example")
 public class JavaConfig {
     @Bean
     public PostController postController(PostService postService) {
